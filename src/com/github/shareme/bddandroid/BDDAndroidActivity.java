@@ -94,7 +94,7 @@ public class BDDAndroidActivity extends Activity {
      *         otherwise
      */
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_START:
                 mLunarThread.doStart();

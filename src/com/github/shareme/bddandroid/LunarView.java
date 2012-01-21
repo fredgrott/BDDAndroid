@@ -607,9 +607,9 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
             synchronized (mSurfaceHolder) {
                 mCanvasWidth = width;
                 mCanvasHeight = height;
-
+               
                 // don't forget to resize the background image
-                mBackgroundImage = Bitmap.createScaledBitmap(
+                mBackgroundImage = mBackgroundImage.createScaledBitmap(
                         mBackgroundImage, width, height, true);
             }
         }
