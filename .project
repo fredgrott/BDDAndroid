@@ -5,7 +5,7 @@
 	<projects>
 	</projects>
 	<buildSpec>
-                <buildCommand>
+		<buildCommand>
 			<name>org.eclipse.ajdt.core.ajbuilder</name>
 			<arguments>
 			</arguments>
@@ -30,10 +30,22 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>net.sf.eclipsecs.core.CheckstyleBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>net.sourceforge.pmd.eclipse.plugin.pmdBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
-                <nature>org.eclipse.ajdt.ui.ajnature</nature>
+		<nature>org.eclipse.ajdt.ui.ajnature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
+		<nature>net.sourceforge.pmd.eclipse.plugin.pmdNature</nature>
 	</natures>
 </projectDescription>

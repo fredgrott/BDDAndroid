@@ -1,0 +1,5 @@
+Device Ram Size 768MB
+Cache Partition Size 558MB
+LCD 260
+
+emulator launch settings -no-boot-anim -scale .84
