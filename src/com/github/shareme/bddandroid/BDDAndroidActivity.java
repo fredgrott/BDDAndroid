@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TextView;
 
+// TODO: Auto-generated Javadoc
 /**
  * This is a simple LunarLander activity that houses a single LunarView. It
  * demonstrates...
@@ -36,18 +37,26 @@ import android.widget.TextView;
  * </ul>
  */
 public class BDDAndroidActivity extends Activity {
+	
+	/** The Constant MENU_EASY. */
 	private static final int MENU_EASY = 1;
 
+    /** The Constant MENU_HARD. */
     private static final int MENU_HARD = 2;
 
+    /** The Constant MENU_MEDIUM. */
     private static final int MENU_MEDIUM = 3;
 
+    /** The Constant MENU_PAUSE. */
     private static final int MENU_PAUSE = 4;
 
+    /** The Constant MENU_RESUME. */
     private static final int MENU_RESUME = 5;
 
+    /** The Constant MENU_START. */
     private static final int MENU_START = 6;
 
+    /** The Constant MENU_STOP. */
     private static final int MENU_STOP = 7;
 
     /** A handle to the thread that's actually running the animation. */
@@ -109,6 +118,8 @@ public class BDDAndroidActivity extends Activity {
             case MENU_HARD:
                 mLunarThread.setDifficulty(LunarThread.DIFFICULTY_HARD);
                 return true;
+		default:
+			break;
         }
 
         return false;

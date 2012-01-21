@@ -15,7 +15,7 @@
    <rule name="CallSuperFirst"
       since="4.2.5" language="java"
       message="super should be called at the start of the method"
-      class="net.sourceforge.pmd.lang.rule.XPathRule"
+      class="net.sourceforge.pmd.rules.XPathRule"
       externalInfoUrl="http://pmd.sourceforge.net/rules/java/android.html#CallSuperFirst">
     <description>Super should be called at the start of the method</description>
     <priority>3</priority>
@@ -57,7 +57,7 @@ public class DummyActivity extends Activity {
   <rule name="CallSuperLast"
       since="4.2.5" language="java"
       message="super should be called at the end of the method"
-      class="net.sourceforge.pmd.lang.rule.XPathRule"
+      class="net.sourceforge.pmd.rules.XPathRule"
       externalInfoUrl="http://pmd.sourceforge.net/rules/java/android.html#CallSuperLast">
     <description>Super should be called at the end of the method</description>
     <priority>3</priority>
@@ -99,7 +99,7 @@ public class DummyActivity extends Activity {
   <rule name="DoNotHardCodeSDCard"
       since="4.2.6" language="java"
       message="Do not hardcode /sdcard."
-      class="net.sourceforge.pmd.lang.rule.XPathRule"
+      class="net.sourceforge.pmd.rules.XPathRule"
       externalInfoUrl="http://pmd.sourceforge.net/rules/java/android.html#DoNotHardCodeSDCard">
     <description>Use Environment.getExternalStorageDirectory() instead of "/sdcard"</description>
     <priority>3</priority>
