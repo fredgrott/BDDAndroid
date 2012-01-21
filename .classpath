@@ -4,5 +4,11 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="lib" path="/home/fredgrott/opt/android/android-sdk-linux/extras/android/support/v4/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="/home/fredgrott/opt/android/android-sdk-linux/extras/android/support/v13/android-support-v13.jar"/>
+	<classpathentry kind="lib" path="/home/fredgrott/git/GITHUB/BDDAndroid/libs/aspectjrt-1.6.12.jar"/>
+	<classpathentry kind="lib" path="/home/fredgrott/git/GITHUB/BDDAndroid/libs/guice-3.0-no_aop.jar"/>
+	<classpathentry kind="lib" path="/home/fredgrott/git/GITHUB/BDDAndroid/libs/javax.inject.jar"/>
+	<classpathentry kind="lib" path="/home/fredgrott/git/GITHUB/BDDAndroid/libs/roboguice-2.0b3.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
