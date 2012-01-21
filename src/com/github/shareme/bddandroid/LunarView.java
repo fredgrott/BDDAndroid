@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -34,6 +35,7 @@ import android.view.View;
 import android.widget.TextView;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * View that draws, takes keystrokes, etc. for a simple LunarLander game.
  * 
@@ -44,69 +46,141 @@ import android.widget.TextView;
  * by the system.
  */
 class LunarView extends SurfaceView implements SurfaceHolder.Callback {
+	
+    /**
+     * The Class LunarThread.
+     */
     class LunarThread extends Thread {
         /*
          * Difficulty setting constants
          */
+        /** The Constant DIFFICULTY_EASY. */
         public static final int DIFFICULTY_EASY = 0;
+        
+        /** The Constant DIFFICULTY_HARD. */
         public static final int DIFFICULTY_HARD = 1;
+        
+        /** The Constant DIFFICULTY_MEDIUM. */
         public static final int DIFFICULTY_MEDIUM = 2;
         /*
          * Physics constants
          */
+        /** The Constant PHYS_DOWN_ACCEL_SEC. */
         public static final int PHYS_DOWN_ACCEL_SEC = 35;
+        
+        /** The Constant PHYS_FIRE_ACCEL_SEC. */
         public static final int PHYS_FIRE_ACCEL_SEC = 80;
+        
+        /** The Constant PHYS_FUEL_INIT. */
         public static final int PHYS_FUEL_INIT = 60;
+        
+        /** The Constant PHYS_FUEL_MAX. */
         public static final int PHYS_FUEL_MAX = 100;
+        
+        /** The Constant PHYS_FUEL_SEC. */
         public static final int PHYS_FUEL_SEC = 10;
+        
+        /** The Constant PHYS_SLEW_SEC. */
         public static final int PHYS_SLEW_SEC = 120; // degrees/second rotate
+        
+        /** The Constant PHYS_SPEED_HYPERSPACE. */
         public static final int PHYS_SPEED_HYPERSPACE = 180;
+        
+        /** The Constant PHYS_SPEED_INIT. */
         public static final int PHYS_SPEED_INIT = 30;
+        
+        /** The Constant PHYS_SPEED_MAX. */
         public static final int PHYS_SPEED_MAX = 120;
         /*
          * State-tracking constants
          */
+        /** The Constant STATE_LOSE. */
         public static final int STATE_LOSE = 1;
+        
+        /** The Constant STATE_PAUSE. */
         public static final int STATE_PAUSE = 2;
+        
+        /** The Constant STATE_READY. */
         public static final int STATE_READY = 3;
+        
+        /** The Constant STATE_RUNNING. */
         public static final int STATE_RUNNING = 4;
+        
+        /** The Constant STATE_WIN. */
         public static final int STATE_WIN = 5;
 
         /*
          * Goal condition constants
          */
+        /** The Constant TARGET_ANGLE. */
         public static final int TARGET_ANGLE = 18; // > this angle means crash
+        
+        /** The Constant TARGET_BOTTOM_PADDING. */
         public static final int TARGET_BOTTOM_PADDING = 17; // px below gear
+        
+        /** The Constant TARGET_PAD_HEIGHT. */
         public static final int TARGET_PAD_HEIGHT = 8; // how high above ground
+        
+        /** The Constant TARGET_SPEED. */
         public static final int TARGET_SPEED = 28; // > this speed means crash
+        
+        /** The Constant TARGET_WIDTH. */
         public static final double TARGET_WIDTH = 1.6; // width of target
         /*
          * UI constants (i.e. the speed & fuel bars)
          */
+        /** The Constant UI_BAR. */
         public static final int UI_BAR = 100; // width of the bar(s)
+        
+        /** The Constant UI_BAR_HEIGHT. */
         public static final int UI_BAR_HEIGHT = 10; // height of the bar(s)
+        
+        /** The Constant KEY_DIFFICULTY. */
         private static final String KEY_DIFFICULTY = "mDifficulty";
+        
+        /** The Constant KEY_DX. */
         private static final String KEY_DX = "mDX";
 
+        /** The Constant KEY_DY. */
         private static final String KEY_DY = "mDY";
+        
+        /** The Constant KEY_FUEL. */
         private static final String KEY_FUEL = "mFuel";
+        
+        /** The Constant KEY_GOAL_ANGLE. */
         private static final String KEY_GOAL_ANGLE = "mGoalAngle";
+        
+        /** The Constant KEY_GOAL_SPEED. */
         private static final String KEY_GOAL_SPEED = "mGoalSpeed";
+        
+        /** The Constant KEY_GOAL_WIDTH. */
         private static final String KEY_GOAL_WIDTH = "mGoalWidth";
 
+        /** The Constant KEY_GOAL_X. */
         private static final String KEY_GOAL_X = "mGoalX";
+        
+        /** The Constant KEY_HEADING. */
         private static final String KEY_HEADING = "mHeading";
+        
+        /** The Constant KEY_LANDER_HEIGHT. */
         private static final String KEY_LANDER_HEIGHT = "mLanderHeight";
+        
+        /** The Constant KEY_LANDER_WIDTH. */
         private static final String KEY_LANDER_WIDTH = "mLanderWidth";
+        
+        /** The Constant KEY_WINS. */
         private static final String KEY_WINS = "mWinsInARow";
 
+        /** The Constant KEY_X. */
         private static final String KEY_X = "mX";
+        
+        /** The Constant KEY_Y. */
         private static final String KEY_Y = "mY";
 
         /*
          * Member (state) fields
          */
-        /** The drawable to use as the background of the animation canvas */
+        /** The drawable to use as the background of the animation canvas. */
         private Bitmap mBackgroundImage;
 
         /**
@@ -123,7 +197,7 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
          */
         private int mCanvasWidth = 1;
 
-        /** What to draw for the Lander when it has crashed */
+        /** What to draw for the Lander when it has crashed. */
         private Drawable mCrashedImage;
 
         /**
@@ -138,13 +212,13 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
         /** Velocity dy. */
         private double mDY;
 
-        /** Is the engine burning? */
+        /** Is the engine burning?. */
         private boolean mEngineFiring;
 
-        /** What to draw for the Lander when the engine is firing */
+        /** What to draw for the Lander when the engine is firing. */
         private Drawable mFiringImage;
 
-        /** Fuel remaining */
+        /** Fuel remaining. */
         private double mFuel;
 
         /** Allowed angle. */
@@ -159,7 +233,7 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
         /** X of the landing pad. */
         private int mGoalX;
 
-        /** Message handler used by thread to interact with TextView */
+        /** Message handler used by thread to interact with TextView. */
         private Handler mHandler;
 
         /**
@@ -171,13 +245,13 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
         /** Pixel height of lander image. */
         private int mLanderHeight;
 
-        /** What to draw for the Lander in its normal state */
+        /** What to draw for the Lander in its normal state. */
         private Drawable mLanderImage;
 
         /** Pixel width of lander image. */
         private int mLanderWidth;
 
-        /** Used to figure out elapsed time between frames */
+        /** Used to figure out elapsed time between frames. */
         private long mLastTime;
 
         /** Paint to draw the lines on screen. */
@@ -192,13 +266,13 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
         /** Currently rotating, -1 left, 0 none, 1 right. */
         private int mRotating;
 
-        /** Indicate whether the surface has been created & is ready to draw */
+        /** Indicate whether the surface has been created & is ready to draw. */
         private boolean mRun = false;
 
         /** Scratch rect object. */
         private RectF mScratchRect;
 
-        /** Handle to the surface manager object we interact with */
+        /** Handle to the surface manager object we interact with. */
         private SurfaceHolder mSurfaceHolder;
 
         /** Number of wins in a row. */
@@ -210,6 +284,13 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
         /** Y of lander center. */
         private double mY;
 
+        /**
+         * Instantiates a new lunar thread.
+         *
+         * @param surfaceHolder the surface holder
+         * @param context the context
+         * @param handler the handler
+         */
         public LunarThread(SurfaceHolder surfaceHolder, Context context,
                 Handler handler) {
             // get handles to some important objects
@@ -298,8 +379,9 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
                 // Figure initial spot for landing, not too near center
                 while (true) {
                     mGoalX = (int) (Math.random() * (mCanvasWidth - mGoalWidth));
-                    if (Math.abs(mGoalX - (mX - mLanderWidth / 2)) > mCanvasHeight / 6)
-                        break;
+                    if (Math.abs(mGoalX - (mX - mLanderWidth / 2)) > mCanvasHeight / 6) {
+						break;
+					}
                 }
 
                 mLastTime = System.currentTimeMillis() + 100;
@@ -312,7 +394,9 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
          */
         public void pause() {
             synchronized (mSurfaceHolder) {
-                if (mMode == STATE_RUNNING) setState(STATE_PAUSE);
+                if (mMode == STATE_RUNNING) {
+					setState(STATE_PAUSE);
+				}
             }
         }
 
@@ -347,6 +431,9 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
+        /* (non-Javadoc)
+         * @see java.lang.Thread#run()
+         */
         @Override
         public void run() {
             while (mRun) {
@@ -354,7 +441,9 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
                 try {
                     c = mSurfaceHolder.lockCanvas(null);
                     synchronized (mSurfaceHolder) {
-                        if (mMode == STATE_RUNNING) updatePhysics();
+                        if (mMode == STATE_RUNNING) {
+							updatePhysics();
+						}
                         doDraw(c);
                     }
                 } finally {
@@ -371,7 +460,8 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
         /**
          * Dump game state to the provided Bundle. Typically called when the
          * Activity is being suspended.
-         * 
+         *
+         * @param map the map
          * @return Bundle with this view's state
          */
         public Bundle saveState(Bundle map) {
@@ -399,8 +489,8 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
 
         /**
          * Sets the current difficulty.
-         * 
-         * @param difficulty
+         *
+         * @param difficulty the new difficulty
          */
         public void setDifficulty(int difficulty) {
             synchronized (mSurfaceHolder) {
@@ -410,6 +500,8 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
 
         /**
          * Sets if the engine is currently firing.
+         *
+         * @param firing the new firing
          */
         public void setFiring(boolean firing) {
             synchronized (mSurfaceHolder) {
@@ -432,9 +524,9 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
         /**
          * Sets the game mode. That is, whether we are running, paused, in the
          * failure state, in the victory state, etc.
-         * 
-         * @see #setState(int, CharSequence)
+         *
          * @param mode one of the STATE_* constants
+         * @see #setState(int, CharSequence)
          */
         public void setState(int mode) {
             synchronized (mSurfaceHolder) {
@@ -473,22 +565,25 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
                     mEngineFiring = false;
                     Resources res = mContext.getResources();
                     CharSequence str = "";
-                    if (mMode == STATE_READY)
-                        str = res.getText(R.string.mode_ready);
-                    else if (mMode == STATE_PAUSE)
-                        str = res.getText(R.string.mode_pause);
-                    else if (mMode == STATE_LOSE)
-                        str = res.getText(R.string.mode_lose);
-                    else if (mMode == STATE_WIN)
-                        str = res.getString(R.string.mode_win_prefix)
+                    if (mMode == STATE_READY) {
+						str = res.getText(R.string.mode_ready);
+					} else if (mMode == STATE_PAUSE) {
+						str = res.getText(R.string.mode_pause);
+					} else if (mMode == STATE_LOSE) {
+						str = res.getText(R.string.mode_lose);
+					} else if (mMode == STATE_WIN) {
+						str = res.getString(R.string.mode_win_prefix)
                                 + mWinsInARow + " "
                                 + res.getString(R.string.mode_win_suffix);
+					}
 
                     if (message != null) {
                         str = message + "\n" + str;
                     }
 
-                    if (mMode == STATE_LOSE) mWinsInARow = 0;
+                    if (mMode == STATE_LOSE) {
+						mWinsInARow = 0;
+					}
 
                     Message msg = mHandler.obtainMessage();
                     Bundle b = new Bundle();
@@ -501,6 +596,12 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         /* Callback invoked when the surface dimensions change. */
+        /**
+         * Sets the surface size.
+         *
+         * @param width the width
+         * @param height the height
+         */
         public void setSurfaceSize(int width, int height) {
             // synchronized to make sure these all change atomically
             synchronized (mSurfaceHolder) {
@@ -508,7 +609,7 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
                 mCanvasHeight = height;
 
                 // don't forget to resize the background image
-                mBackgroundImage = mBackgroundImage.createScaledBitmap(
+                mBackgroundImage = Bitmap.createScaledBitmap(
                         mBackgroundImage, width, height, true);
             }
         }
@@ -534,9 +635,15 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
         boolean doKeyDown(int keyCode, KeyEvent msg) {
             synchronized (mSurfaceHolder) {
                 boolean okStart = false;
-                if (keyCode == KeyEvent.KEYCODE_DPAD_UP) okStart = true;
-                if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) okStart = true;
-                if (keyCode == KeyEvent.KEYCODE_S) okStart = true;
+                if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+					okStart = true;
+				}
+                if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+					okStart = true;
+				}
+                if (keyCode == KeyEvent.KEYCODE_S) {
+					okStart = true;
+				}
 
                 boolean center = (keyCode == KeyEvent.KEYCODE_DPAD_UP);
 
@@ -608,6 +715,8 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
         /**
          * Draws the ship, fuel/speed bars, and background to the provided
          * Canvas.
+         *
+         * @param canvas the canvas
          */
         private void doDraw(Canvas canvas) {
             // Draw the background image. Operations on the Canvas accumulate
@@ -679,7 +788,9 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
             // Do nothing if mLastTime is in the future.
             // This allows the game-start to delay the start of the physics
             // by 100ms or whatever.
-            if (mLastTime > now) return;
+            if (mLastTime > now) {
+				return;
+			}
 
             double elapsed = (now - mLastTime) / 1000.0;
 
@@ -688,9 +799,11 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
                 mHeading += mRotating * (PHYS_SLEW_SEC * elapsed);
 
                 // Bring things back into the range 0..360
-                if (mHeading < 0)
-                    mHeading += 360;
-                else if (mHeading >= 360) mHeading -= 360;
+                if (mHeading < 0) {
+					mHeading += 360;
+				} else if (mHeading >= 360) {
+					mHeading -= 360;
+				}
             }
 
             // Base accelerations -- 0 for x, gravity for y
@@ -782,9 +895,15 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
     /** Pointer to the text view to display "Paused.." etc. */
     private TextView mStatusText;
 
-    /** The thread that actually draws the animation */
-    private LunarThread thread;
+    /** The thread that actually draws the animation. */
+    private LunarThread mThread;
 
+    /**
+     * Instantiates a new lunar view.
+     *
+     * @param context the context
+     * @param attrs the attrs
+     */
     public LunarView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -793,7 +912,7 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
         holder.addCallback(this);
 
         // create thread only; it's started in surfaceCreated()
-        thread = new LunarThread(holder, context, new Handler() {
+        mThread = new LunarThread(holder, context, new Handler() {
             @Override
             public void handleMessage(Message m) {
                 mStatusText.setVisibility(m.getData().getInt("viz"));
@@ -810,74 +929,104 @@ class LunarView extends SurfaceView implements SurfaceHolder.Callback {
      * @return the animation thread
      */
     public LunarThread getThread() {
-        return thread;
+        return mThread;
     }
 
     /**
      * Standard override to get key-press events.
+     *
+     * @param keyCode the key code
+     * @param msg the msg
+     * @return true, if successful
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent msg) {
-        return thread.doKeyDown(keyCode, msg);
+        return mThread.doKeyDown(keyCode, msg);
     }
 
     /**
      * Standard override for key-up. We actually care about these, so we can
      * turn off the engine or stop rotating.
+     *
+     * @param keyCode the key code
+     * @param msg the msg
+     * @return true, if successful
      */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent msg) {
-        return thread.doKeyUp(keyCode, msg);
+        return mThread.doKeyUp(keyCode, msg);
     }
 
     /**
      * Standard window-focus override. Notice focus lost so we can pause on
      * focus lost. e.g. user switches to take a call.
+     *
+     * @param hasWindowFocus the has window focus
      */
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
-        if (!hasWindowFocus) thread.pause();
+        if (!hasWindowFocus) {
+			mThread.pause();
+		}
     }
 
     /**
      * Installs a pointer to the text view used for messages.
+     *
+     * @param textView the new text view
      */
     public void setTextView(TextView textView) {
         mStatusText = textView;
     }
 
-    /* Callback invoked when the surface dimensions change. */
+    /**
+     * Callback invoked when the surface dimensions change.
+     * (non-Javadoc)
+     *
+     * @param holder the holder
+     * @param format the format
+     * @param width the width
+     * @param height the height
+     * @see android.view.SurfaceHolder.Callback#surfaceChanged(android.view.SurfaceHolder, int, int, int)
+     */
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
             int height) {
-        thread.setSurfaceSize(width, height);
+        mThread.setSurfaceSize(width, height);
     }
 
-    /*
+    /**
      * Callback invoked when the Surface has been created and is ready to be
      * used.
+     * (non-Javadoc)
+     *
+     * @param holder the holder
+     * @see android.view.SurfaceHolder.Callback#surfaceCreated(android.view.SurfaceHolder)
      */
     public void surfaceCreated(SurfaceHolder holder) {
         // start the thread here so that we don't busy-wait in run()
         // waiting for the surface to be created
-        thread.setRunning(true);
-        thread.start();
+        mThread.setRunning(true);
+        mThread.start();
     }
 
-    /*
+    /**
      * Callback invoked when the Surface has been destroyed and must no longer
      * be touched. WARNING: after this method returns, the Surface/Canvas must
      * never be touched again!
+     *
+     * @param holder the holder
      */
     public void surfaceDestroyed(SurfaceHolder holder) {
         // we have to tell thread to shut down & wait for it to finish, or else
         // it might touch the Surface after we return and explode
         boolean retry = true;
-        thread.setRunning(false);
+        mThread.setRunning(false);
         while (retry) {
             try {
-                thread.join();
+                mThread.join();
                 retry = false;
             } catch (InterruptedException e) {
+            	Log.e("BDDAndroid", "error, threaddi dnot shut down on destroy surface");
             }
         }
     }
